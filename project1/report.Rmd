@@ -1,0 +1,62 @@
+---
+title: "ANOVA"
+toc: false
+
+header-includes:
+   - \usepackage[T1]{fontenc}
+   - \usepackage{lmodern}
+   - \usepackage{fancyhdr}
+   - \pagestyle{fancy}
+   - \fancyhead{}
+   - \lhead{Report 1}
+   - \rhead{Vos, Ben Mahmoud, Schmidt}
+   - \headheight = 15pt
+   
+output: 
+  pdf_document:
+    number_sections: true
+    fig_caption: true
+
+fontsize: 12pt
+geometry: margin = 2.5cm
+pagenumbering: true
+---
+
+```{r setup, include=FALSE}
+options(tinytex.verbose = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Introduction
+
+In the article \cite{article}, some rotten apples are studied. We analyse their data.
+
+# ANOVA is dope
+
+```{r load apple data}
+apple<-read.table("./apple.txt",col.names = c("varieties","strains","days","weight","radius","advance","rate"))
+```
+
+```{r aov}
+# C'est rien du tout, c'est just epour tester l'affichage de plot
+apple.aov <- aov(advance~varieties*strains , data = apple)
+interaction.plot(apple$varieties,apple$strains,apple$advance,xlab = "Varieties",ylab = "Advance")
+```
+
+
+
+\newpage
+
+# Next part
+Allow to see that wonderful header
+
+\begin{thebibliography}{9}
+\nocite{article}
+
+
+\bibitem{article}
+
+A. S. Horne Frederick Gugenheim Gregory Vernon Herbert Blackman {"A quantitative study of the course of fungal invasion of the apple fruit, and its bearing on the nature of disease resistance.—Part II. The application of the statistical method to certain specific problems"}. \textbf{102}. \textit{Proceedings of the Royal Society of London. Series B, Containing Papers of a Biological Character}
+http://doi.org/10.1098/rspb.1928.0018
+\end{thebibliography}
+
