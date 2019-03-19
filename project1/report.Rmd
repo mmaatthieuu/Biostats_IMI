@@ -1,25 +1,24 @@
 ---
 title: "ANOVA"
-toc: false
-
-header-includes:
-   - \usepackage[T1]{fontenc}
-   - \usepackage{lmodern}
-   - \usepackage{fancyhdr}
-   - \pagestyle{fancy}
-   - \fancyhead{}
-   - \lhead{Report 1}
-   - \rhead{Vos, Ben Mahmoud, Schmidt}
-   - \headheight = 15pt
-   
-output: 
-  pdf_document:
-    number_sections: true
-    fig_caption: true
-
-fontsize: 12pt
 geometry: margin = 2.5cm
-pagenumbering: true
+header-includes:
+- \usepackage[T1]{fontenc}
+- \usepackage{lmodern}
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- \fancyhead{}
+- \lhead{Report 1}
+- \rhead{Vos, Ben Mahmoud, Schmidt}
+- \headheight = 15pt
+output:
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+  html_document:
+    df_print: paged
+pagenumbering: yes
+fontsize: 12pt
+toc: no
 ---
 
 ```{r setup, include=FALSE}
@@ -31,21 +30,45 @@ knitr::opts_chunk$set(echo = FALSE)
 
 In the article \cite{article}, some rotten apples are studied. We analyse their data.
 
-# ANOVA is dope
+# Data exploration
 
 ```{r load apple data}
 apple<-read.table("./apple.txt",col.names = c("varieties","strains","days","weight","radius","advance","rate"))
+apple$varieties<-as.factor(apple$varieties)
+apple$strains<-as.factor(apple$strains)
+
+#mean_rate_var<-tapply(apple$rate, list(apple$varieties), mean)
+#tapply(apple$rate, list(apple$strains), mean)
+#tapply(apple$rate, list(apple$varieties), sd)
+#tapply(apple$rate, list(apple$strains), sd)
+#tapply(apple$advance, list(apple$varieties, apple$strains), mean)
+#tapply(apple$advance, list(apple$varieties, apple$strains, apple$days,apple$weight,apple$radius), mean)
 ```
 
-```{r aov}
-# C'est rien du tout, c'est just epour tester l'affichage de plot
-apple.aov <- aov(advance~varieties*strains , data = apple)
-interaction.plot(apple$varieties,apple$strains,apple$advance,xlab = "Varieties",ylab = "Advance")
+```{r plot}
+layout(matrix(1:2,ncol=2))
+boxplot(advance~apple$varieties,data=apple,xlab="Apple Variety",ylab="Fungal Radial Advance [cm]")
+boxplot(rate~apple$varieties,data=apple,xlab="Apple Variety",ylab="Advance Rate [cm/day]")
+
+layout(matrix(1:2,ncol=2))
+boxplot(advance~apple$strains,data=apple,xlab="Fusarium Strain",ylab="Fungal Radial Advance [cm]")
+boxplot(rate~apple$strains,data=apple,xlab="Fusarium Strain",ylab="Advance Rate [cm/day]")
 ```
 
 
 
-\newpage
+
+```{r brute force du modèle}
+
+apple.aov<-aov(rate~varieties+strains, data=apple)
+summary(apple.aov)
+coef(apple.aov)
+
+#layout(matrix(1:4,ncol=2))
+#plot(apple.aov) -> ça marche pas pour le pdf
+
+
+```
 
 # Next part
 Allow to see that wonderful header
